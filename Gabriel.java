@@ -3,12 +3,13 @@ public class Gabriel {
     private static Predio predio;
     private static final int N_ANDARES = 5;
     private static final int N_PASSAGEIROS = 5;
-    private static final int ANDAR_INICIAL = 0;
+    private static final int ANDAR_INICIAL = 5;
 
     public Gabriel(int nPassageiros) {
         criarPassageiros(nPassageiros);
 
         predio = new Predio(ANDAR_INICIAL, passageiros);
+        new Jogo(predio);
     }
 
     private void criarPassageiros(int nPassageiros) {

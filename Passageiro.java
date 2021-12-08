@@ -1,5 +1,5 @@
 public class Passageiro extends Thread {
-    private boolean rodando = false;
+    private volatile boolean rodando = false;
     private int andarDestino;
     private static final int INTERVALO_EXECUCAO = 2000;
     

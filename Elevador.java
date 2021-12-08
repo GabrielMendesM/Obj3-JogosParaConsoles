@@ -1,15 +1,38 @@
+import java.awt.Graphics;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+
 public class Elevador extends Thread {
-    private boolean rodando = false;
+    private volatile boolean rodando = false;
     private static final int INTERVALO_EXECUCAO = 2000;
+
+    private JPanel panel;
+    private ImageIcon portaAberta;
+    private ImageIcon portaFechada;
+
+    private boolean portaEstaAberta = false;
 
     private int nAndares;
     private int andarAtual;
     private int andarDestino;
-    private final int ANDAR_INICIAL;
+    private int pos;
 
-    public Elevador(int nAndares, int andarInicial) {
+    public Elevador(JPanel panel, int nAndares, int andarInicial) {
+        this.panel = panel;
         this.nAndares = nAndares;
-        this.ANDAR_INICIAL = andarInicial;
+        
+        this.portaAberta = new ImageIcon(getClass().getResource("./img/elevator_open.png"));
+        this.portaFechada = new ImageIcon(getClass().getResource("./img/elevator_close.png"));
+
+        pos = andarInicial * (portaAberta.getIconHeight() + 11);
+    }
+
+    public void draw(Graphics g) {
+        if (portaEstaAberta) {
+            portaAberta.paintIcon(panel, g, 10, pos);
+        } else {
+            portaFechada.paintIcon(panel, g, 10, pos);
+        }
     }
 
     public void comecar() {
@@ -23,11 +46,17 @@ public class Elevador extends Thread {
     }
 
     public void abrirPorta() {
+        portaEstaAberta = true;        
         
+        panel.revalidate();
+        panel.repaint();
     }
 
     public void fecharPorta() {
+        portaEstaAberta = false;        
         
+        panel.revalidate();
+        panel.repaint();
     }
 
     public void subirAndar() {
@@ -52,6 +81,7 @@ public class Elevador extends Thread {
         super.run();
 
         while (rodando) {
+            System.out.println("Elevador rodando.");
             mover(andarAtual, andarDestino);
 
             try {
