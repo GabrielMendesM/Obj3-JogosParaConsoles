@@ -5,13 +5,16 @@ public class Gabriel {
     private static Predio predio;
     private static final int N_ANDARES = 8;
     private static final int N_PASSAGEIROS = 8;
-    private static final int ANDAR_INICIAL = 0;//ThreadLocalRandom.current().nextInt(0, N_PASSAGEIROS);
+    private static final int ANDAR_INICIAL = ThreadLocalRandom.current().nextInt(0, N_ANDARES);
 
     public Gabriel(int nPassageiros) {
+        predio = new Predio(N_ANDARES, ANDAR_INICIAL, passageiros);
+        
         criarPassageiros(nPassageiros);
 
-        predio = new Predio(N_ANDARES, ANDAR_INICIAL, passageiros);
         new Jogo(predio);
+
+        System.out.println(ANDAR_INICIAL + 1);
     }
 
     private void criarPassageiros(int nPassageiros) {
@@ -20,4 +23,5 @@ public class Gabriel {
             //DISTRIBUIR PASSAGEIROS
         }
     }
+
 }

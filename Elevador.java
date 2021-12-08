@@ -17,15 +17,15 @@ public class Elevador extends Thread {
     private int andarDestino;
     private int pos;
 
-    public Elevador(JPanel panel, int nAndares, int andarInicial) {
+    public Elevador(JPanel panel, int nAndares, int andarInicial, int posInicial) {
         this.panel = panel;
         this.nAndares = nAndares;
         this.andarAtual = andarInicial;
-        
+        this.pos = posInicial;
+
         this.portaAberta = new ImageIcon(getClass().getResource("./img/elevator_open.png"));
         this.portaFechada = new ImageIcon(getClass().getResource("./img/elevator_close.png"));
 
-        pos = andarInicial * (portaAberta.getIconHeight() + 11);
     }
 
     public void draw(Graphics g) {

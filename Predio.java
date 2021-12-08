@@ -1,13 +1,16 @@
 import java.awt.Graphics;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.print.attribute.standard.MediaSize.NA;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class Predio extends JPanel {
-    private final int ANDAR_INICIAL;
     private final int N_ANDARES;
-    private ImageIcon[] andares;
+    
+    private final List<Andar> andares = new ArrayList<>();
     
     private final Passageiro[] passageiros;
     private final Elevador elevador;
@@ -15,16 +18,15 @@ public class Predio extends JPanel {
     public Predio(int nAndares, int andarInicial, Passageiro[] passageiros) {
         super();
         this.N_ANDARES = nAndares;
-        this.ANDAR_INICIAL = andarInicial;
         this.passageiros = passageiros;
 
-        this.andares = new ImageIcon[N_ANDARES];
-
-        for (int i = 0; i < andares.length; i++) {
-            andares[i] = new ImageIcon(getClass().getResource("./img/andar.png"));
+        for (int i = 0; i < N_ANDARES; i++) {
+            andares.add(new Andar(this));
+            andares.get(i).setPosY( i * andares.get(i).getImg().getIconHeight());
         }
+        Collections.reverse(andares);
 
-        this.elevador = new Elevador(this, N_ANDARES, ANDAR_INICIAL);
+        this.elevador = new Elevador(this, N_ANDARES, andarInicial, andares.get(andarInicial).getPosY());
     }
 
     public void comecar() {
@@ -35,8 +37,8 @@ public class Predio extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
-        for (int i = 0; i < andares.length; i++) {
-            andares[i].paintIcon(this, g, 0, i * andares[i].getIconHeight());
+        for (int i = 0; i < andares.size(); i++) {
+            andares.get(i).draw(g);
         }
 
         elevador.draw(g);
@@ -47,6 +49,6 @@ public class Predio extends JPanel {
     }
 
     public int getAlturaPredio() {
-        return (N_ANDARES + 1) * andares[0].getIconHeight();
+        return (N_ANDARES + 1) * andares.get(0).getImg().getIconHeight();
     }
 }
