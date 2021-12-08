@@ -1,12 +1,3 @@
-import java.awt.BorderLayout;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
-import java.awt.Dimension;
-
-import java.awt.Button;
-import java.awt.FlowLayout;
-
 public class Gabriel {
     private Passageiro[] passageiros;
     private static Predio predio;
