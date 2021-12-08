@@ -1,5 +1,3 @@
-import java.net.URL;
-import java.awt.Component;
 import java.awt.Graphics;
 
 import javax.swing.ImageIcon;
@@ -23,8 +21,8 @@ public class Andar {
         img.paintIcon(panel, g, 0, posY);
     }
 
-    public ImageIcon getImg() {
-        return img;
+    public int getImgHeight() {
+        return img.getIconHeight();
     }
 
     public int getPosY() {

@@ -1,5 +1,6 @@
 import java.awt.Graphics;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -22,15 +23,22 @@ public class Predio extends JPanel {
 
         for (int i = 0; i < N_ANDARES; i++) {
             andares.add(new Andar(this));
-            andares.get(i).setPosY( i * andares.get(i).getImg().getIconHeight());
+            andares.get(i).setPosY( i * andares.get(i).getImgHeight());
         }
         Collections.reverse(andares);
 
-        this.elevador = new Elevador(this, N_ANDARES, andarInicial, andares.get(andarInicial).getPosY());
+        elevador = new Elevador(this, N_ANDARES, andarInicial, andares.get(andarInicial).getPosY());
+
+        System.out.println("Andar Inicial: " + (andarInicial + 1));
     }
 
     public void comecar() {
-        this.elevador.comecar();
+        elevador.comecar();
+        elevador.setDestino(ThreadLocalRandom.current().nextInt(0, N_ANDARES));
+    }
+
+    public void parar() {
+        this.elevador.parar();
     }
 
     @Override
@@ -49,6 +57,15 @@ public class Predio extends JPanel {
     }
 
     public int getAlturaPredio() {
-        return (N_ANDARES + 1) * andares.get(0).getImg().getIconHeight();
+        return (N_ANDARES + 1) * andares.get(0).getImgHeight();
+    }
+
+    public List<Andar> getAndares() {
+        return andares;
+    }
+
+    public void repintar() {
+        revalidate();
+        repaint();
     }
 }
