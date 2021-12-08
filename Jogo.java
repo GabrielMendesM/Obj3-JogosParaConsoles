@@ -10,7 +10,7 @@ import javax.swing.WindowConstants;
 public class Jogo extends JFrame {
     public Jogo(Predio predio) {
         setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(600, 700));
+        setPreferredSize(new Dimension(580, predio.getAlturaPredio()));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         add(predio, BorderLayout.CENTER);
         setVisible(true);

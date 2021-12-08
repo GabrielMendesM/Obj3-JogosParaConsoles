@@ -4,7 +4,7 @@ import javax.swing.JPanel;
 
 public class Elevador extends Thread {
     private volatile boolean rodando = false;
-    private static final int INTERVALO_EXECUCAO = 2000;
+    private static final int INTERVALO_EXECUCAO = 20;
 
     private JPanel panel;
     private ImageIcon portaAberta;
@@ -20,6 +20,7 @@ public class Elevador extends Thread {
     public Elevador(JPanel panel, int nAndares, int andarInicial) {
         this.panel = panel;
         this.nAndares = nAndares;
+        this.andarAtual = andarInicial;
         
         this.portaAberta = new ImageIcon(getClass().getResource("./img/elevator_open.png"));
         this.portaFechada = new ImageIcon(getClass().getResource("./img/elevator_close.png"));
@@ -60,11 +61,15 @@ public class Elevador extends Thread {
     }
 
     public void subirAndar() {
-        
+        pos--;
+        panel.revalidate();
+        panel.repaint();
     }
 
     public void descerAndar() {
-        
+        pos++;
+        panel.revalidate();
+        panel.repaint();
     }
 
     public void mover(int andarAtual, int andarDestino) {
@@ -73,7 +78,6 @@ public class Elevador extends Thread {
         } else {
             subirAndar();
         }
-        
     }
 
     @Override
@@ -81,8 +85,11 @@ public class Elevador extends Thread {
         super.run();
 
         while (rodando) {
+            descerAndar();
+            /*
             System.out.println("Elevador rodando.");
             mover(andarAtual, andarDestino);
+            */
 
             try {
                 Thread.sleep(INTERVALO_EXECUCAO);
