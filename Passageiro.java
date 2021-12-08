@@ -1,23 +1,10 @@
-public class Elevador extends Thread implements IElevador {
+public class Passageiro extends Thread {
     private boolean rodando = false;
+    private int andarDestino;
     private static final int INTERVALO_EXECUCAO = 2000;
-
-    private int nAndares;
-    private final int ANDAR_INICIAL;
-
-    public Elevador(int nAndares, int andarInicial) {
-        this.nAndares = nAndares;
-        this.ANDAR_INICIAL = andarInicial;
-    }
-
-    @Override
-    public void abrirPorta() {
-        System.out.println("Abrir porta");
-    }
-
-    @Override
-    public void fecharPorta() {
-
+    
+    public Passageiro(int andarDestino) {
+        this.andarDestino = andarDestino;
     }
 
     public void comecar() {
