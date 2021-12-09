@@ -7,6 +7,8 @@ public class Passageiro extends Thread {
     private volatile boolean rodando = false;
     private static final int INTERVALO_EXECUCAO = 20;
     
+    private int lugarNaFila;
+    private int andarAtual;
     private int posX;
     private int posY;
     private int posXDestino;
@@ -17,8 +19,10 @@ public class Passageiro extends Thread {
 
     private boolean estaNoElevador = false;
     private boolean chegouAoDestino = true;
-    
     public Passageiro(int lugarNaFila, int andarInicial, Predio predio) {
+        this.lugarNaFila = lugarNaFila;
+        this.andarAtual = andarInicial;
+
         this.predio = predio;
 
         this.posX = predio.getElevador().getLargura() * lugarNaFila;
@@ -45,6 +49,10 @@ public class Passageiro extends Thread {
 
     }
 
+    private void abrirPorta() {
+        predio.getElevador().abrirPorta();
+    }
+
     private void entrarNoElevador() {
 
     }
@@ -53,6 +61,16 @@ public class Passageiro extends Thread {
 
     }
 
+    private void fecharPorta() {
+        predio.getElevador().fecharPorta();
+    }
+
+    private void visitarAndar(int andar) {
+        predio.getElevador().visitarAndar(andar);
+        posYDestino = predio.getAndares().get(andar).getPosY();
+        chegouAoDestino = false;        
+    }
+    
     private void moverY() {
 
     }
@@ -77,17 +95,11 @@ public class Passageiro extends Thread {
         }
     }
 
-    private void abrirPorta() {
-        predio.getElevador().abrirPorta();
+    public void setLugarNaFila(int lugarNaFila) {
+        this.lugarNaFila = lugarNaFila;
     }
 
-    private void fecharPorta() {
-        predio.getElevador().fecharPorta();
-    }
-
-    private void visitarAndar(int andar) {
-        predio.getElevador().visitarAndar(andar);
-        posYDestino = predio.getAndares().get(andar).getPosY();
-        chegouAoDestino = false;        
+    public void setAndarAtual(int andar) {
+        this.andarAtual = andar;
     }
 }
