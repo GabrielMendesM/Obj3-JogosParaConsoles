@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -9,21 +11,40 @@ public class App {
     private static final int N_PASSAGEIROS = 8;
     private static final int ANDAR_INICIAL = ThreadLocalRandom.current().nextInt(0, N_ANDARES);
 
-    private List<List<Passageiro>> filas = new ArrayList<>();
+    private List<Integer> filas = new ArrayList<>();
 
     public App() {
         predio = new Predio(N_ANDARES, ANDAR_INICIAL);
 
+        for (int i = 0; i < N_ANDARES; i++) {
+            filas.add(0);
+        }
         criarPassageiros();
         predio.setPassageiros(passageiros.toArray(new Passageiro[N_PASSAGEIROS]));        
         new Janela(predio);
+
+        //Passageiro com menor pos em X da fila entra no elevador
     }
 
     private void criarPassageiros() {
         for (int i = 0; i < N_PASSAGEIROS; i++) {
             int andarInicial = ThreadLocalRandom.current().nextInt(0, N_ANDARES);
-            passageiros.add(new Passageiro(i + 1, andarInicial, predio));
+            int posNaFila;
+            for (int j = 0; j < N_ANDARES; j++) {
+                if (j == andarInicial) {
+                    if (filas.get(j) > 0) {
+                        posNaFila = filas.get(j) + 1;
+                        passageiros.add(new Passageiro(posNaFila, j, predio));
+                        filas.set(j, filas.get(j) + 1);
+                    } else {
+                        posNaFila = 1;
+                        passageiros.add(new Passageiro(posNaFila, j, predio));
+                        filas.set(j, filas.get(j) + 1);
+                    }
+                }
+            }
         }
+        Collections.reverse(filas);
     }
 
     private void addPassageirosNaFila(int indice, Passageiro passageiro) {

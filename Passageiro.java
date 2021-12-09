@@ -59,7 +59,7 @@ public class Passageiro extends Thread {
 
     private void update() {
         //mover();
-        System.out.println("Passageiro");
+        System.out.println("Passageiro update");
     }
 
     @Override
