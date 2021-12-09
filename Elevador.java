@@ -1,13 +1,10 @@
 import java.awt.Graphics;
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 
-public class Elevador extends Thread {
+public class Elevador extends Thread implements IElevador {
     private volatile boolean rodando = false;
     private static final int INTERVALO_EXECUCAO = 20;
 
-    private final int N_ANDARES;
-    private int andarAtual; //comparar a posição do elevador com as posições da lista
     private int pos;
     private int posDestino;
 
@@ -18,14 +15,13 @@ public class Elevador extends Thread {
     private boolean portaEstaAberta = false;
     private boolean chegouAoDestino = true;
 
-    public Elevador(Predio predio, int nAndares, int andarInicial, int posInicial) {
-        this.N_ANDARES = nAndares;
-        this.andarAtual = andarInicial;
+    public Elevador(Predio predio, int nAndares, int posInicial) {
         this.pos = posInicial;
 
         this.predio = predio;
-        this.portaAberta = new ImageIcon(getClass().getResource("./img/elevator_open.png"));
-        this.portaFechada = new ImageIcon(getClass().getResource("./img/elevator_close.png"));
+        
+        portaAberta = new ImageIcon(getClass().getResource("./img/elevator_open.png"));
+        portaFechada = new ImageIcon(getClass().getResource("./img/elevator_close.png"));
     }
 
     public void draw(Graphics g) {
@@ -46,36 +42,16 @@ public class Elevador extends Thread {
         this.rodando = false;
     }
 
-    public void abrirPorta() {
-        portaEstaAberta = true;        
-        
-        predio.repintar();
-    }
-
-    public void fecharPorta() {
-        portaEstaAberta = false;
-        predio.repintar();
-    }
-
-    private void subirAndar() {
-        pos += 3;
-        predio.repintar();
-    }
-
-    private void descerAndar() {
-        pos -= 3;
-        predio.repintar();
-    }
-
     private void mover() {        
         if (!chegouAoDestino) {
-            if (posDestino > pos) {
-                subirAndar();
-            } else if (posDestino < pos) {
-                descerAndar();
+            if (posDestino < pos) {
+                pos -= 3;
+            } else if (posDestino > pos) {
+                pos += 3;
             } else {
                 chegouAoDestino = true;
             }
+            predio.repintar();
         }
     }
 
@@ -93,11 +69,26 @@ public class Elevador extends Thread {
             }
         }
     }
+    public int getLargura() {
+        return portaAberta.getIconWidth();
+    }
 
-    public void setDestino(int andarDestino) {       
-        posDestino = predio.getAndares().get(andarDestino).getPosY();
+    @Override
+    public void abrirPorta() {
+        portaEstaAberta = true;        
+        
+        predio.repintar();
+    }
+
+    @Override
+    public void fecharPorta() {
+        portaEstaAberta = false;
+        predio.repintar();
+    }
+
+    @Override
+    public void visitarAndar(int andar) {
+        posDestino = predio.getAndares().get(andar).getPosY();
         chegouAoDestino = false;
-
-        System.out.println("Andar destino: " + (andarDestino + 1));
     }
 }

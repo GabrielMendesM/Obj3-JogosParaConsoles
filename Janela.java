@@ -7,8 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-public class Jogo extends JFrame {
-    public Jogo(Predio predio) {
+public class Janela extends JFrame {
+    public Janela(Predio predio) {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(580, predio.getAlturaPredio()));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

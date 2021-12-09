@@ -1,11 +1,8 @@
 import java.awt.Graphics;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import javax.print.attribute.standard.MediaSize.NA;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class Predio extends JPanel {
@@ -13,13 +10,12 @@ public class Predio extends JPanel {
     
     private final List<Andar> andares = new ArrayList<>();
     
-    private final Passageiro[] passageiros;
+    private Passageiro[] passageiros;
     private final Elevador elevador;
     
-    public Predio(int nAndares, int andarInicial, Passageiro[] passageiros) {
+    public Predio(int nAndares, int andarInicial) {
         super();
         this.N_ANDARES = nAndares;
-        this.passageiros = passageiros;
 
         for (int i = 0; i < N_ANDARES; i++) {
             andares.add(new Andar(this));
@@ -27,17 +23,21 @@ public class Predio extends JPanel {
         }
         Collections.reverse(andares);
 
-        elevador = new Elevador(this, N_ANDARES, andarInicial, andares.get(andarInicial).getPosY());
-
-        System.out.println("Andar Inicial: " + (andarInicial + 1));
+        this.elevador = new Elevador(this, N_ANDARES, andares.get(andarInicial).getPosY());
     }
 
     public void comecar() {
+        for (Passageiro p : passageiros) {
+            p.comecar();
+        }
         elevador.comecar();
-        elevador.setDestino(ThreadLocalRandom.current().nextInt(0, N_ANDARES));
+        elevador.visitarAndar(0);
     }
 
     public void parar() {
+        for (Passageiro p : passageiros) {
+            p.parar();
+        }
         this.elevador.parar();
     }
 
@@ -48,8 +48,17 @@ public class Predio extends JPanel {
         for (int i = 0; i < andares.size(); i++) {
             andares.get(i).draw(g);
         }
+        if (passageiros.length > 0) {
+            for (Passageiro p : passageiros) {
+                p.draw(g);
+            }    
+        }
 
         elevador.draw(g);
+    }
+
+    public void setPassageiros(Passageiro[] passageiros) {
+        this.passageiros = passageiros;
     }
 
     public Elevador getElevador() {
