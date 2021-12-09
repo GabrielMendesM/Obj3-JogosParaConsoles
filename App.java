@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -44,7 +42,9 @@ public class App {
                 }
             }
         }
-        Collections.reverse(filas);
+        for (int i = 0; i < filas.size(); i++) {
+            System.out.println((i + 1) + "º Andar: " + filas.get(i) + " passageiros");
+        }
     }
 
     private void addPassageirosNaFila(int indice, Passageiro passageiro) {
