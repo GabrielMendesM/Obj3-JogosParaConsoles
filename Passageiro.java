@@ -111,8 +111,14 @@ public class Passageiro extends Thread implements IElevador {
             abrirPorta();
             while (posX < posXDestino) {
                 posX++;
-                if (posX >= predio.getElevador().getLargura()) {
+                if (estaNoElevador && posX >= predio.getElevador().getLargura()) {
                     fecharPorta();
+                    estaNoElevador = false;
+                    chegouAoDestino = true;
+                    andarAtual = andarDestino;
+                    predio.setFilas(andarAtual, true);
+                    lugarNaFila = predio.getFilas().get(andarAtual);
+                    predio.getElevador().setEstaOcupado(false);
                 }
                 predio.repintar();
                 
@@ -122,12 +128,6 @@ public class Passageiro extends Thread implements IElevador {
                     e.printStackTrace();
                 }
             }
-            estaNoElevador = false;
-            chegouAoDestino = true;
-            andarAtual = andarDestino;
-            predio.setFilas(andarAtual, true);
-            lugarNaFila = predio.getFilas().get(andarAtual);
-            predio.getElevador().setEstaOcupado(false);
             posXDestino = 10;
             rodouVezes++;
         }

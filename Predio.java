@@ -36,7 +36,7 @@ public class Predio extends JPanel {
 
         int andarDestino = elevador.getAndarAtual();
         if (andarDestino > N_ANDARES / 2) {
-            for (int i = filas.size() - 1; i > 0; i--) {
+            for (int i = filas.size() - 1; i > -1; i--) {
                 System.out.println("Fila " + i + " tem " + filas.get(i) + " pessoas.");
                 if (filas.get(andarDestino) < filas.get(i)) {
                     andarDestino = i;
