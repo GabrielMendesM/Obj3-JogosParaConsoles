@@ -63,7 +63,7 @@ public class Passageiro extends Thread implements IElevador {
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 Thread.currentThread().interrupt();
-            }    
+            }
         }
     }
 

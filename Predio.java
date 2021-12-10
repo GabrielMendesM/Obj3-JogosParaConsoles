@@ -35,11 +35,17 @@ public class Predio extends JPanel {
         elevador.comecar();
 
         int andarDestino = 0;
-        for (int i = 1; i < filas.size(); i++) {
-            if (filas.get(i) > filas.get(i - 1)) {
+        for (int i = 0; i < filas.size(); i++) {
+            System.out.println("Fila " + i + " tem " + filas.get(i) + " pessoas.");
+            if (filas.get(andarDestino) < filas.get(i)) {
                 andarDestino = i;
             }
         }
+        /*for (int i = 1; i < filas.size(); i++) {
+            if (filas.get(i) > filas.get(i - 1)) {
+                andarDestino = i;
+            }
+        }*/
         elevador.visitarAndar(andarDestino);
     }
 
@@ -92,19 +98,18 @@ public class Predio extends JPanel {
             this.filas.set(indice, filas.get(indice) - 1);
         }
 
-        
-        for (int i = 0; i < N_ANDARES; i++) {
+        /*for (int i = 0; i < N_ANDARES; i++) {
             System.out.println((i + 1) + "º andar: " + filas.get(i) + " pessoas na fila.");
-        }
+        }*/
         
     }
 
     public void setFilas(List<Integer> filas) {
         this.filas = filas;
         
-        for (int i = 0; i < N_ANDARES; i++) {
+        /*for (int i = 0; i < N_ANDARES; i++) {
             System.out.println((i + 1) + "º andar: " + filas.get(i) + " pessoas na fila.");
-        }
+        }*/
         
     }
 
