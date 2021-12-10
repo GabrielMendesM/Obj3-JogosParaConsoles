@@ -5,11 +5,16 @@
 */
 
 import java.awt.Graphics;
+import java.util.concurrent.Semaphore;
+
 import javax.swing.ImageIcon;
 
 public class Elevador extends Thread implements IElevador {
     private volatile boolean rodando = false;
-    private static final int INTERVALO_EXECUCAO = 20;
+    private static final int INTERVALO_EXECUCAO = 32;
+    private static final Semaphore ELEVADOR_SEM = new Semaphore(1);
+
+    int aux = 0;
 
     private int pos;
     private int posDestino;
@@ -59,8 +64,10 @@ public class Elevador extends Thread implements IElevador {
             } else if (posDestino > pos) {
                 pos += 3;
             } else {
-                chegouAoDestino = true;
+                aux++;
+                System.out.println("Elevador chegou " + aux + " vezes.");
                 andarAtual = andarDestino;
+                chegouAoDestino = true;
             }
             predio.repintar();
         }
@@ -76,7 +83,7 @@ public class Elevador extends Thread implements IElevador {
             try {
                 Thread.sleep(INTERVALO_EXECUCAO);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
     }
@@ -117,5 +124,9 @@ public class Elevador extends Thread implements IElevador {
 
     public void setEstaOcupado(boolean estaOcupado) {
         this.estaOcupado = estaOcupado;
+    }
+
+    public static final Semaphore getElevadorSem() {
+        return ELEVADOR_SEM;
     }
 }

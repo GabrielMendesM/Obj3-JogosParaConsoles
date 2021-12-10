@@ -6,6 +6,7 @@
 
 import java.awt.Graphics;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -13,6 +14,7 @@ import javax.swing.JPanel;
 
 public class Predio extends JPanel {
     private final int N_ANDARES;
+    private static Semaphore filaSem = new Semaphore(0);
     
     private final List<Andar> andares = new ArrayList<>();
     
@@ -110,6 +112,10 @@ public class Predio extends JPanel {
             this.filas.set(indice, filas.get(indice) - 1);
         }
 
+        //if (filas.get(elevador.getAndarAtual()) > 0) filaSem.release(filas.get(elevador.getAndarAtual()));
+
+        //System.out.println((elevador.getAndarAtual() + 1) + "º andar: " + filas.get(elevador.getAndarAtual()) + " pessoas na fila.");
+
         /*for (int i = 0; i < N_ANDARES; i++) {
             System.out.println((i + 1) + "º andar: " + filas.get(i) + " pessoas na fila.");
         }*/
@@ -118,15 +124,24 @@ public class Predio extends JPanel {
 
     public void setFilas(List<Integer> filas) {
         this.filas = filas;
-        
+
         /*for (int i = 0; i < N_ANDARES; i++) {
             System.out.println((i + 1) + "º andar: " + filas.get(i) + " pessoas na fila.");
         }*/
-        
+        //if (filas.get(elevador.getAndarAtual()) > 0) filaSem.release(filas.get(elevador.getAndarAtual()));
+        //System.out.println((elevador.getAndarAtual() + 1) + "º andar: " + filas.get(elevador.getAndarAtual()) + " pessoas na fila.");
     }
 
     public void repintar() {
         revalidate();
         repaint();
+    }
+
+    public static Semaphore getFilaSem() {
+        return filaSem;
+    }
+
+    public static void setFilaSem(Semaphore sem) {
+        filaSem = sem;
     }
 }
