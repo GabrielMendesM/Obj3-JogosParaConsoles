@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 
 public class Elevador extends Thread implements IElevador {
     private volatile boolean rodando = false;
-    private static final int INTERVALO_EXECUCAO = 30;
+    private static final int INTERVALO_EXECUCAO = 20;
 
     private int pos;
     private int posDestino;

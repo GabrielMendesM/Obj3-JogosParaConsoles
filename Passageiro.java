@@ -1,70 +1,6 @@
 /*
 
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-============ PERSONAGENS ANDAREM NA FILA ============
+MUTEX SÓ PODE USAR O ELEVADOR SE ESTIVER NO ELEVACOR
 
 */
 
@@ -76,7 +12,7 @@ import javax.swing.ImageIcon;
 public class Passageiro extends Thread implements IElevador {
     private volatile boolean rodando = false;
     private static final int INTERVALO_EXECUCAO = 20;
-    private static final int TEMPO_ESPERA = 1000;
+    private static final int TEMPO_ESPERA = 500;
     
     private int rodouVezes = 0;
 
@@ -129,7 +65,14 @@ public class Passageiro extends Thread implements IElevador {
         if (lugarNaFila != 0) {
             //System.out.println("Passageiro " + id + " é o " + lugarNaFila + "º da fila do " + (andarAtual + 1) + "º andar");
             try {
-                Thread.sleep(TEMPO_ESPERA * lugarNaFila);
+                /*
+                int esperaAux = lugarNaFila;
+                if (lugarNaFila < 3) {
+                    esperaAux = TEMPO_ESPERA;
+                } else {
+                    esperaAux = TEMPO_ESPERA * (lugarNaFila / 2);
+                }*/
+                Thread.sleep(TEMPO_ESPERA);
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 Thread.currentThread().interrupt();
@@ -139,18 +82,30 @@ public class Passageiro extends Thread implements IElevador {
 
     private void avancarNaFila() {
         //Se o elevador estiver cheio e estiver no andar atual, todos do andar devem diminuir 1 lugar na fila e avançarem até o novo ponto
-        while (posX > posXDestino) {
-            posX--;
-            predio.repintar();
+        //Ir para o último lugar levando em consideração q a fila vai andar pra frente
+        if (!estaNoElevador &&
+            lugarNaFila > 1 &&
+            andarAtual == predio.getElevador().getAndarAtual() &&
+            predio.getElevador().getEstaOcupado() && 
+            chegouAoDestino) {
             
-            try {
-                Thread.sleep(INTERVALO_EXECUCAO / 2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            chegouAoDestino = false;
+            lugarNaFila--;
+            posXDestino = predio.getElevador().getLargura() * lugarNaFila;
+            
+            while (posX > posXDestino) {
+                posX--;
+                predio.repintar();
+                
+                try {
+                    Thread.sleep(INTERVALO_EXECUCAO / 2);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+
         }
-    }
-    
+    }    
 
     private void entrarNoElevador() {
         if (!estaNoElevador && 
@@ -199,7 +154,6 @@ public class Passageiro extends Thread implements IElevador {
                 if (estaNoElevador && posX >= predio.getElevador().getLargura()) {
                     fecharPorta();
                     estaNoElevador = false;
-                    chegouAoDestino = true;
                     andarAtual = andarDestino;
                     predio.setFilas(andarAtual, true);
                     lugarNaFila = predio.getFilas().get(andarAtual);
@@ -215,6 +169,7 @@ public class Passageiro extends Thread implements IElevador {
             }
             posXDestino = 10;
             rodouVezes++;
+            chegouAoDestino = true;
         }
     }
 
@@ -239,6 +194,7 @@ public class Passageiro extends Thread implements IElevador {
         esperar();
         entrarNoElevador();
         moverY();
+        avancarNaFila();
         sairDoElevador();
         //visitarAndar(ThreadLocalRandom.current().nextInt(0, predio.getAndares().size()));
         //sairDoElevador();

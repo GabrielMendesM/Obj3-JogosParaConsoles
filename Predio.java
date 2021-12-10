@@ -41,16 +41,18 @@ public class Predio extends JPanel {
         elevador.comecar();
 
         int andarDestino = elevador.getAndarAtual();
-        if (andarDestino > N_ANDARES / 2) {
+        if (filas.get(elevador.getAndarAtual()) > 0) {
+            andarDestino = elevador.getAndarAtual();
+        } else if (andarDestino > N_ANDARES / 2) {
             for (int i = filas.size() - 1; i > -1; i--) {
-                System.out.println("Fila " + i + " tem " + filas.get(i) + " pessoas.");
+                //System.out.println("Fila " + i + " tem " + filas.get(i) + " pessoas.");
                 if (filas.get(andarDestino) < filas.get(i)) {
                     andarDestino = i;
                 }
             }    
         } else {
             for (int i = 0; i < filas.size(); i++) {
-                System.out.println("Fila " + i + " tem " + filas.get(i) + " pessoas.");
+                //System.out.println("Fila " + i + " tem " + filas.get(i) + " pessoas.");
                 if (filas.get(andarDestino) < filas.get(i)) {
                     andarDestino = i;
                 }
