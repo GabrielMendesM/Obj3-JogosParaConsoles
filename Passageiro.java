@@ -1,3 +1,73 @@
+/*
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+*/
+
 import java.awt.Graphics;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -67,6 +137,21 @@ public class Passageiro extends Thread implements IElevador {
         }
     }
 
+    private void avancarNaFila() {
+        //Se o elevador estiver cheio e estiver no andar atual, todos do andar devem diminuir 1 lugar na fila e avançarem até o novo ponto
+        while (posX > posXDestino) {
+            posX--;
+            predio.repintar();
+            
+            try {
+                Thread.sleep(INTERVALO_EXECUCAO / 2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+
     private void entrarNoElevador() {
         if (!estaNoElevador && 
             lugarNaFila == 1 && 
@@ -132,8 +217,7 @@ public class Passageiro extends Thread implements IElevador {
             rodouVezes++;
         }
     }
-  
-    
+
     private void moverY() {
         if (estaNoElevador && 
             lugarNaFila == 0 &&

@@ -1,3 +1,9 @@
+/*
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+*/
+
 import java.awt.Graphics;
 import javax.swing.ImageIcon;
 

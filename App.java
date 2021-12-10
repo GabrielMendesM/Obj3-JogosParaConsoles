@@ -1,3 +1,9 @@
+/*
+
+============ PERSONAGENS ANDAREM NA FILA ============
+
+*/
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -6,8 +12,8 @@ public class App {
     private List<Passageiro> passageiros = new ArrayList<>();
     private static Predio predio;
     private static final int N_ANDARES = 8;
-    private static final int N_PASSAGEIROS = 30;
-    private static final int ANDAR_INICIAL = 7;//ThreadLocalRandom.current().nextInt(0, N_ANDARES);
+    private static final int N_PASSAGEIROS = 100;
+    private static final int ANDAR_INICIAL = ThreadLocalRandom.current().nextInt(0, N_ANDARES);
 
     private List<Integer> filas = new ArrayList<>();
 
