@@ -92,20 +92,20 @@ public class Predio extends JPanel {
             this.filas.set(indice, filas.get(indice) - 1);
         }
 
-        /*
+        
         for (int i = 0; i < N_ANDARES; i++) {
             System.out.println((i + 1) + "º andar: " + filas.get(i) + " pessoas na fila.");
         }
-        */
+        
     }
 
     public void setFilas(List<Integer> filas) {
         this.filas = filas;
-        /*
+        
         for (int i = 0; i < N_ANDARES; i++) {
             System.out.println((i + 1) + "º andar: " + filas.get(i) + " pessoas na fila.");
         }
-        */
+        
     }
 
     public void repintar() {

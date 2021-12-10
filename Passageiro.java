@@ -51,6 +51,7 @@ public class Passageiro extends Thread implements IElevador {
     public void parar() {
         this.interrupt();
         this.rodando = false;
+        System.out.println("No total, personagem " + id + " usou o elevador " + rodouVezes + " vezes.");
     }
 
     private void esperar() {
@@ -92,8 +93,6 @@ public class Passageiro extends Thread implements IElevador {
             predio.getElevador().setEstaOcupado(true);
             fecharPorta();
 
-            posXDestino = predio.getElevador().getLargura() * (predio.getFilas().get(andarDestino) + 1);
-
             int destinoAux = ThreadLocalRandom.current().nextInt(0, predio.getAndares().size());
             while (destinoAux == andarAtual) {
                 destinoAux = ThreadLocalRandom.current().nextInt(0, predio.getAndares().size());
@@ -103,7 +102,6 @@ public class Passageiro extends Thread implements IElevador {
     }
 
     private void sairDoElevador() {
-        System.out.println("estaNoElevador: " + estaNoElevador + "\nlugarNaFila: " + lugarNaFila + "\nandarAtual (personagem/predio): " + andarAtual + " / " + predio.getElevador().getAndarAtual() + "\nelevar está no destino: " + predio.getElevador().getEstaNoDestino());
         if (estaNoElevador && 
             lugarNaFila == 0 && 
             andarAtual == predio.getElevador().getAndarAtual() &&
@@ -113,7 +111,7 @@ public class Passageiro extends Thread implements IElevador {
             abrirPorta();
             while (posX < posXDestino) {
                 posX++;
-                if (posX > predio.getElevador().getLargura()) {
+                if (posX >= predio.getElevador().getLargura()) {
                     fecharPorta();
                 }
                 predio.repintar();
@@ -132,7 +130,6 @@ public class Passageiro extends Thread implements IElevador {
             predio.getElevador().setEstaOcupado(false);
             posXDestino = 10;
             rodouVezes++;
-            System.out.println("Rodou " + rodouVezes + " vezes");
         }
     }
   
@@ -199,10 +196,8 @@ public class Passageiro extends Thread implements IElevador {
     @Override
     public void visitarAndar(int andar) {
         //System.out.println("Passageiro " + id + " está saindo do " + (andarAtual + 1) + "º andar e indo para o " + (andar + 1) + "º andar.");
-        if (andarAtual == andar) {
-            System.out.println("Origem e destino foram iguais");
-        }
         andarDestino = andar;
+        posXDestino = predio.getElevador().getLargura() * (predio.getFilas().get(andarDestino) + 1);
         predio.getElevador().visitarAndar(andar);
         posYDestino = predio.getAndares().get(andar).getPosY();
         chegouAoDestino = false;        
