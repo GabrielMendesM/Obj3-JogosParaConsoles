@@ -7,7 +7,7 @@ public class App {
     private static Predio predio;
     private static final int N_ANDARES = 8;
     private static final int N_PASSAGEIROS = 30;
-    private static final int ANDAR_INICIAL = 0;// ThreadLocalRandom.current().nextInt(0, N_ANDARES);
+    private static final int ANDAR_INICIAL = ThreadLocalRandom.current().nextInt(0, N_ANDARES);
 
     private List<Integer> filas = new ArrayList<>();
 
