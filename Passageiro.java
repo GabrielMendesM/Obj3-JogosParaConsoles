@@ -8,6 +8,8 @@ public class Passageiro extends Thread implements IElevador {
     private static final int INTERVALO_EXECUCAO = 20;
     private static final int TEMPO_ESPERA = 1000;
     
+    private int rodouVezes = 0;
+
     private int id;
     private int lugarNaFila;
     private int andarAtual;
@@ -54,7 +56,7 @@ public class Passageiro extends Thread implements IElevador {
     private void esperar() {
         //System.out.println("Passageiro " + id + " está esperando");
         if (lugarNaFila != 0) {
-            System.out.println("Passageiro " + id + " é o " + lugarNaFila + "º da fila do " + (andarAtual + 1) + "º andar");
+            //System.out.println("Passageiro " + id + " é o " + lugarNaFila + "º da fila do " + (andarAtual + 1) + "º andar");
             try {
                 Thread.sleep(TEMPO_ESPERA * lugarNaFila);
             } catch (InterruptedException e) {
@@ -71,7 +73,7 @@ public class Passageiro extends Thread implements IElevador {
             !predio.getElevador().getEstaOcupado() &&
             predio.getElevador().getEstaNoDestino()) {
 
-            System.out.println("Passageiro[" + id + "] pode entrar no elevador.");
+            //System.out.println("Passageiro[" + id + "] pode entrar no elevador.");
             abrirPorta();
             while (posX > posXDestino) {
                 posX--;
@@ -92,19 +94,28 @@ public class Passageiro extends Thread implements IElevador {
 
             posXDestino = predio.getElevador().getLargura() * (predio.getFilas().get(andarDestino) + 1);
 
-            visitarAndar(ThreadLocalRandom.current().nextInt(0, predio.getAndares().size()));
+            int destinoAux = ThreadLocalRandom.current().nextInt(0, predio.getAndares().size());
+            while (destinoAux == andarAtual) {
+                destinoAux = ThreadLocalRandom.current().nextInt(0, predio.getAndares().size());
+            }
+            visitarAndar(destinoAux);
         }
     }
 
     private void sairDoElevador() {
+        System.out.println("estaNoElevador: " + estaNoElevador + "\nlugarNaFila: " + lugarNaFila + "\nandarAtual (personagem/predio): " + andarAtual + " / " + predio.getElevador().getAndarAtual() + "\nelevar está no destino: " + predio.getElevador().getEstaNoDestino());
         if (estaNoElevador && 
             lugarNaFila == 0 && 
-            andarAtual == predio.getElevador().getAndarAtual() && predio.getElevador().getEstaNoDestino()) {
+            andarAtual == predio.getElevador().getAndarAtual() &&
+            predio.getElevador().getEstaNoDestino()) {
 
-            System.out.println("Passageiro[" + id + "] pode sair do elevador.");
+            //System.out.println("Passageiro[" + id + "] pode sair do elevador.");
             abrirPorta();
             while (posX < posXDestino) {
                 posX++;
+                if (posX > predio.getElevador().getLargura()) {
+                    fecharPorta();
+                }
                 predio.repintar();
                 
                 try {
@@ -119,8 +130,9 @@ public class Passageiro extends Thread implements IElevador {
             predio.setFilas(andarAtual, true);
             lugarNaFila = predio.getFilas().get(andarAtual);
             predio.getElevador().setEstaOcupado(false);
-            fecharPorta();
             posXDestino = 10;
+            rodouVezes++;
+            System.out.println("Rodou " + rodouVezes + " vezes");
         }
     }
   
@@ -186,7 +198,10 @@ public class Passageiro extends Thread implements IElevador {
 
     @Override
     public void visitarAndar(int andar) {
-        System.out.println("Passageiro " + id + " está saindo do " + andarAtual + "º andar e indo para o " + andar + "º andar.");
+        //System.out.println("Passageiro " + id + " está saindo do " + (andarAtual + 1) + "º andar e indo para o " + (andar + 1) + "º andar.");
+        if (andarAtual == andar) {
+            System.out.println("Origem e destino foram iguais");
+        }
         andarDestino = andar;
         predio.getElevador().visitarAndar(andar);
         posYDestino = predio.getAndares().get(andar).getPosY();
