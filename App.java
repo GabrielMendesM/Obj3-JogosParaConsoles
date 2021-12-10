@@ -6,8 +6,8 @@ public class App {
     private List<Passageiro> passageiros = new ArrayList<>();
     private static Predio predio;
     private static final int N_ANDARES = 8;
-    private static final int N_PASSAGEIROS = 9;
-    private static final int ANDAR_INICIAL = ThreadLocalRandom.current().nextInt(0, N_ANDARES);
+    private static final int N_PASSAGEIROS = 1;
+    private static final int ANDAR_INICIAL = 0;// ThreadLocalRandom.current().nextInt(0, N_ANDARES);
 
     private List<Integer> filas = new ArrayList<>();
 
@@ -19,9 +19,8 @@ public class App {
         }
         criarPassageiros();
         predio.setPassageiros(passageiros.toArray(new Passageiro[N_PASSAGEIROS]));        
+        predio.setFilas(filas);
         new Janela(predio);
-
-        //Passageiro com menor pos em X da fila entra no elevador
     }
 
     private void criarPassageiros() {
@@ -32,29 +31,15 @@ public class App {
                 if (j == andarInicial) {
                     if (filas.get(j) > 0) {
                         posNaFila = filas.get(j) + 1;
-                        passageiros.add(new Passageiro(posNaFila, j, predio));
+                        passageiros.add(new Passageiro(i, posNaFila, j, predio));
                         filas.set(j, filas.get(j) + 1);
                     } else {
                         posNaFila = 1;
-                        passageiros.add(new Passageiro(posNaFila, j, predio));
+                        passageiros.add(new Passageiro(i, posNaFila, j, predio));
                         filas.set(j, filas.get(j) + 1);
                     }
                 }
             }
         }
-        for (int i = 0; i < filas.size(); i++) {
-            System.out.println((i + 1) + "º Andar: " + filas.get(i) + " passageiros");
-        }
-    }
-
-    private void addPassageirosNaFila(int indice, Passageiro passageiro) {
-        /*
-        filas.add(passageiros[i]);
-        filas.get(i).add
-        */
-    }
-
-    private void removerPassageirosDaFila() {
-
     }
 }

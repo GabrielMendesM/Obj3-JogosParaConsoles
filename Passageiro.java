@@ -3,15 +3,17 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.ImageIcon;
 
-public class Passageiro extends Thread {
+public class Passageiro extends Thread implements IElevador {
     private volatile boolean rodando = false;
-    private static final int INTERVALO_EXECUCAO = 20;
+    private static final int INTERVALO_EXECUCAO = 50;
+    private static final int TEMPO_ESPERA = 3000;
     
+    private int id;
     private int lugarNaFila;
     private int andarAtual;
     private int posX;
     private int posY;
-    private int posXDestino;
+    private static final int POS_X_DESTINO = 10;
     private int posYDestino;
     
     private Predio predio;
@@ -19,7 +21,9 @@ public class Passageiro extends Thread {
 
     private boolean estaNoElevador = false;
     private boolean chegouAoDestino = true;
-    public Passageiro(int lugarNaFila, int andarInicial, Predio predio) {
+
+    public Passageiro(int id, int lugarNaFila, int andarInicial, Predio predio) {
+        this.id = id + 1;
         this.lugarNaFila = lugarNaFila;
         this.andarAtual = andarInicial;
 
@@ -46,38 +50,55 @@ public class Passageiro extends Thread {
     }
 
     private void esperar() {
-
-    }
-
-    private void abrirPorta() {
-        predio.getElevador().abrirPorta();
+        //System.out.println("Passageiro " + id + " está esperando");
+        System.out.println("Passageiro " + id + " é o " + lugarNaFila + "º da fila do " + (andarAtual + 1) + "º andar");
+        try {
+            Thread.sleep(TEMPO_ESPERA * lugarNaFila);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
     }
 
     private void entrarNoElevador() {
+        if (!estaNoElevador && 
+            lugarNaFila == 1 && 
+            andarAtual == predio.getElevador().getAndarAtual() && 
+            !predio.getElevador().getEstaOcupado() &&
+            predio.getElevador().getEstaNoDestino()) {
+
+            System.out.println("Passageiro[" + id + "] pode entrar no elevador.");
+            abrirPorta();
+            while (posX > POS_X_DESTINO) {
+                posX--;
+                predio.repintar();
+                
+                try {
+                    Thread.sleep(INTERVALO_EXECUCAO / 2);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        estaNoElevador = true;
+        chegouAoDestino = false;
 
     }
 
     private void sairDoElevador() {
 
     }
-
-    private void fecharPorta() {
-        predio.getElevador().fecharPorta();
-    }
-
-    private void visitarAndar(int andar) {
-        predio.getElevador().visitarAndar(andar);
-        posYDestino = predio.getAndares().get(andar).getPosY();
-        chegouAoDestino = false;        
-    }
+  
     
     private void moverY() {
 
     }
 
     private void update() {
-        //mover();
-        //System.out.println("Passageiro update");
+        esperar();
+        entrarNoElevador();
+        //visitarAndar(ThreadLocalRandom.current().nextInt(0, predio.getAndares().size()));
+        //sairDoElevador();
     }
 
     @Override
@@ -101,5 +122,22 @@ public class Passageiro extends Thread {
 
     public void setAndarAtual(int andar) {
         this.andarAtual = andar;
+    }
+
+    @Override
+    public void abrirPorta() {
+        predio.getElevador().abrirPorta();
+    }
+  
+    @Override
+    public void fecharPorta() {
+        predio.getElevador().fecharPorta();
+    }
+
+    @Override
+    public void visitarAndar(int andar) {
+        predio.getElevador().visitarAndar(andar);
+        posYDestino = predio.getAndares().get(andar).getPosY();
+        chegouAoDestino = false;        
     }
 }

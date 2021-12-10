@@ -7,6 +7,8 @@ public class Elevador extends Thread implements IElevador {
 
     private int pos;
     private int posDestino;
+    private int andarAtual;
+    private int andarDestino;
 
     private Predio predio;
     private ImageIcon portaAberta;
@@ -14,9 +16,11 @@ public class Elevador extends Thread implements IElevador {
 
     private boolean portaEstaAberta = false;
     private boolean chegouAoDestino = true;
+    private boolean estaOcupado = false;
 
-    public Elevador(Predio predio, int nAndares, int posInicial) {
+    public Elevador(Predio predio, int nAndares, int posInicial, int andarInicial) {
         this.pos = posInicial;
+        this.andarAtual = andarInicial;
 
         this.predio = predio;
         
@@ -50,6 +54,7 @@ public class Elevador extends Thread implements IElevador {
                 pos += 3;
             } else {
                 chegouAoDestino = true;
+                andarAtual = andarDestino;
             }
             predio.repintar();
         }
@@ -88,7 +93,24 @@ public class Elevador extends Thread implements IElevador {
 
     @Override
     public void visitarAndar(int andar) {
+        andarDestino = andar;
         posDestino = predio.getAndares().get(andar).getPosY();
         chegouAoDestino = false;
+    }
+
+    public int getAndarAtual() {
+        return andarAtual;
+    }
+
+    public boolean getEstaNoDestino() {
+        return chegouAoDestino;
+    }
+
+    public boolean getEstaOcupado() {
+        return estaOcupado;
+    }
+
+    public void setEstaOcupado(boolean estaOcupado) {
+        this.estaOcupado = estaOcupado;
     }
 }

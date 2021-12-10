@@ -12,7 +12,9 @@ public class Predio extends JPanel {
     
     private Passageiro[] passageiros;
     private final Elevador elevador;
-    
+
+    private List<Integer> filas = new ArrayList<>();
+
     public Predio(int nAndares, int andarInicial) {
         super();
         this.N_ANDARES = nAndares;
@@ -23,7 +25,7 @@ public class Predio extends JPanel {
         }
         Collections.reverse(andares);
 
-        this.elevador = new Elevador(this, N_ANDARES, andares.get(andarInicial).getPosY());
+        this.elevador = new Elevador(this, N_ANDARES, andares.get(andarInicial).getPosY(), andarInicial);
     }
 
     public void comecar() {
@@ -31,7 +33,14 @@ public class Predio extends JPanel {
             p.comecar();
         }
         elevador.comecar();
-        elevador.visitarAndar(0);
+
+        int andarDestino = 0;
+        for (int i = 1; i < filas.size(); i++) {
+            if (filas.get(i) > filas.get(i - 1)) {
+                andarDestino = i;
+            }
+        }
+        elevador.visitarAndar(andarDestino);
     }
 
     public void parar() {
@@ -48,13 +57,12 @@ public class Predio extends JPanel {
         for (int i = 0; i < andares.size(); i++) {
             andares.get(i).draw(g);
         }
+        elevador.draw(g);
         if (passageiros.length > 0) {
             for (Passageiro p : passageiros) {
                 p.draw(g);
             }    
         }
-
-        elevador.draw(g);
     }
 
     public void setPassageiros(Passageiro[] passageiros) {
@@ -71,6 +79,10 @@ public class Predio extends JPanel {
 
     public List<Andar> getAndares() {
         return andares;
+    }
+
+    public void setFilas(List<Integer> filas) {
+        this.filas = filas;
     }
 
     public void repintar() {
