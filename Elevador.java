@@ -80,8 +80,7 @@ public class Elevador extends Thread implements IElevador {
 
     @Override
     public void abrirPorta() {
-        portaEstaAberta = true;        
-        
+        portaEstaAberta = true;
         predio.repintar();
     }
 

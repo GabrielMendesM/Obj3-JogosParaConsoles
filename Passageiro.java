@@ -5,15 +5,16 @@ import javax.swing.ImageIcon;
 
 public class Passageiro extends Thread implements IElevador {
     private volatile boolean rodando = false;
-    private static final int INTERVALO_EXECUCAO = 50;
+    private static final int INTERVALO_EXECUCAO = 20;
     private static final int TEMPO_ESPERA = 3000;
     
     private int id;
     private int lugarNaFila;
     private int andarAtual;
+    private int andarDestino;
     private int posX;
     private int posY;
-    private static final int POS_X_DESTINO = 10;
+    private int posXDestino;
     private int posYDestino;
     
     private Predio predio;
@@ -27,6 +28,7 @@ public class Passageiro extends Thread implements IElevador {
         this.lugarNaFila = lugarNaFila;
         this.andarAtual = andarInicial;
 
+        this.posXDestino = 10;
         this.predio = predio;
 
         this.posX = predio.getElevador().getLargura() * lugarNaFila;
@@ -51,12 +53,14 @@ public class Passageiro extends Thread implements IElevador {
 
     private void esperar() {
         //System.out.println("Passageiro " + id + " está esperando");
-        System.out.println("Passageiro " + id + " é o " + lugarNaFila + "º da fila do " + (andarAtual + 1) + "º andar");
-        try {
-            Thread.sleep(TEMPO_ESPERA * lugarNaFila);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
+        if (lugarNaFila != 0) {
+            System.out.println("Passageiro " + id + " é o " + lugarNaFila + "º da fila do " + (andarAtual + 1) + "º andar");
+            try {
+                Thread.sleep(TEMPO_ESPERA * lugarNaFila);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }    
         }
     }
 
@@ -69,7 +73,7 @@ public class Passageiro extends Thread implements IElevador {
 
             System.out.println("Passageiro[" + id + "] pode entrar no elevador.");
             abrirPorta();
-            while (posX > POS_X_DESTINO) {
+            while (posX > posXDestino) {
                 posX--;
                 predio.repintar();
                 
@@ -79,24 +83,70 @@ public class Passageiro extends Thread implements IElevador {
                     e.printStackTrace();
                 }
             }
-        }
-        estaNoElevador = true;
-        chegouAoDestino = false;
+            estaNoElevador = true;
+            chegouAoDestino = false;
+            lugarNaFila = 0;
+            predio.setFilas(andarAtual, false);
+            predio.getElevador().setEstaOcupado(true);
+            fecharPorta();
 
+            posXDestino = predio.getElevador().getLargura() * (predio.getFilas().get(andarDestino) + 1);
+
+            visitarAndar(ThreadLocalRandom.current().nextInt(0, predio.getAndares().size()));
+        }
     }
 
     private void sairDoElevador() {
+        if (estaNoElevador && 
+            lugarNaFila == 0 && 
+            andarAtual == predio.getElevador().getAndarAtual() && predio.getElevador().getEstaNoDestino()) {
 
+            System.out.println("Passageiro[" + id + "] pode sair do elevador.");
+            abrirPorta();
+            while (posX < posXDestino) {
+                posX++;
+                predio.repintar();
+                
+                try {
+                    Thread.sleep(INTERVALO_EXECUCAO / 2);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            estaNoElevador = false;
+            chegouAoDestino = true;
+            andarAtual = andarDestino;
+            predio.setFilas(andarAtual, true);
+            lugarNaFila = predio.getFilas().get(andarAtual);
+            predio.getElevador().setEstaOcupado(false);
+            fecharPorta();
+            posXDestino = 10;
+        }
     }
   
     
     private void moverY() {
-
+        if (estaNoElevador && 
+            lugarNaFila == 0 &&
+            !predio.getElevador().getEstaNoDestino()) {
+            
+            if (posYDestino < posY) {
+                posY -= 3;
+            } else if (posYDestino > posY) {
+                posY += 3;
+            } else {
+                chegouAoDestino = true;
+                andarAtual = andarDestino;
+            }
+            predio.repintar();
+        }
     }
 
     private void update() {
         esperar();
         entrarNoElevador();
+        moverY();
+        sairDoElevador();
         //visitarAndar(ThreadLocalRandom.current().nextInt(0, predio.getAndares().size()));
         //sairDoElevador();
     }
@@ -136,6 +186,8 @@ public class Passageiro extends Thread implements IElevador {
 
     @Override
     public void visitarAndar(int andar) {
+        System.out.println("Passageiro " + id + " está saindo do " + andarAtual + "º andar e indo para o " + andar + "º andar.");
+        andarDestino = andar;
         predio.getElevador().visitarAndar(andar);
         posYDestino = predio.getAndares().get(andar).getPosY();
         chegouAoDestino = false;        
