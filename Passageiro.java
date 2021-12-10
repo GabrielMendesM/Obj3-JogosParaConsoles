@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 public class Passageiro extends Thread implements IElevador {
     private volatile boolean rodando = false;
     private static final int INTERVALO_EXECUCAO = 20;
-    private static final int TEMPO_ESPERA = 3000;
+    private static final int TEMPO_ESPERA = 1000;
     
     private int id;
     private int lugarNaFila;
