@@ -33,10 +33,10 @@ import javax.swing.ImageIcon;
 
 public class Passageiro extends Thread implements IElevador {
     private volatile boolean rodando = false;
-    private static final int INTERVALO_EXECUCAO = 32;
+    private static final int INTERVALO_EXECUCAO = Elevador.getIntervaloExecucao();
     private static final int TEMPO_ESPERA = 100;
     
-    int aux = 1;
+    //int aux = 1;
 
     private int rodouVezes = 0;
 
@@ -48,6 +48,8 @@ public class Passageiro extends Thread implements IElevador {
     private int posY;
     private int posXDestino;
     private int posYDestino;
+
+    private static final int POS_DENTRO_ELEVADOR = 10;
     
     private Predio predio;
     private ImageIcon img;
@@ -60,7 +62,7 @@ public class Passageiro extends Thread implements IElevador {
         this.lugarNaFila = lugarNaFila;
         this.andarAtual = andarInicial;
 
-        this.posXDestino = 10;
+        this.posXDestino = POS_DENTRO_ELEVADOR;
         this.predio = predio;
 
         this.posX = predio.getElevador().getLargura() * lugarNaFila;
@@ -143,7 +145,7 @@ public class Passageiro extends Thread implements IElevador {
             andarAtual == predio.getElevador().getAndarAtual() && 
             !predio.getElevador().getEstaOcupado() &&
             predio.getElevador().getEstaNoDestino()) {
-
+            
             if (Elevador.getElevadorSem().tryAcquire()) {
                 //System.out.println("Passageiro[" + id + "] pode entrar no elevador.");
                 abrirPorta();
@@ -209,7 +211,7 @@ public class Passageiro extends Thread implements IElevador {
                     //e.printStackTrace();
                 }
             }
-            posXDestino = 10;
+            posXDestino = POS_DENTRO_ELEVADOR;
             rodouVezes++;
             chegouAoDestino = true;
             Elevador.getElevadorSem().release();
@@ -230,7 +232,7 @@ public class Passageiro extends Thread implements IElevador {
             } else if (posYDestino > posY) {
                 posY += 3;
             } else {
-                aux++;
+                //aux++;
                 //System.out.println("Passageiro chegou " + aux + " vezes.");
                 chegouAoDestino = true;
                 andarAtual = andarDestino;

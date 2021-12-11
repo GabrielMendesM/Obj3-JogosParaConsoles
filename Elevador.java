@@ -129,4 +129,8 @@ public class Elevador extends Thread implements IElevador {
     public static final Semaphore getElevadorSem() {
         return ELEVADOR_SEM;
     }
+
+    public static final int getIntervaloExecucao() {
+        return INTERVALO_EXECUCAO;
+    }
 }
