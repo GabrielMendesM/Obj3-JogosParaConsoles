@@ -65,7 +65,7 @@ public class Elevador extends Thread implements IElevador {
                 pos += 3;
             } else {
                 aux++;
-                System.out.println("Elevador chegou " + aux + " vezes.");
+                //System.out.println("Elevador chegou " + aux + " vezes.");
                 andarAtual = andarDestino;
                 chegouAoDestino = true;
             }
