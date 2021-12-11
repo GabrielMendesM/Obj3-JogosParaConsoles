@@ -14,7 +14,7 @@ public class Elevador extends Thread implements IElevador {
     private static final int INTERVALO_EXECUCAO = 32;
     private static final Semaphore ELEVADOR_SEM = new Semaphore(1);
 
-    int aux = 0;
+    //int aux = 0;
 
     private int pos;
     private int posDestino;
@@ -64,7 +64,7 @@ public class Elevador extends Thread implements IElevador {
             } else if (posDestino > pos) {
                 pos += 3;
             } else {
-                aux++;
+                //aux++;
                 //System.out.println("Elevador chegou " + aux + " vezes.");
                 andarAtual = andarDestino;
                 chegouAoDestino = true;
