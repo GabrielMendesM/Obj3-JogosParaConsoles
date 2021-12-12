@@ -12,6 +12,8 @@ import java.util.Collections;
 
 import javax.swing.JPanel;
 
+//MÉTODO VISITAR ANDAR MAIS CHEIO
+
 public class Predio extends JPanel {
     private final int N_ANDARES;
     private static Semaphore filaSem = new Semaphore(0);
@@ -78,11 +80,13 @@ public class Predio extends JPanel {
             andares.get(i).draw(g);
         }
         elevador.draw(g);
+        
         if (passageiros.length > 0) {
             for (Passageiro p : passageiros) {
                 p.draw(g);
             }    
         }
+        
     }
 
     public void setPassageiros(Passageiro[] passageiros) {

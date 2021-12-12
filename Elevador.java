@@ -57,6 +57,8 @@ public class Elevador extends Thread implements IElevador {
         this.rodando = false;
     }
 
+    //MÉTODO VISITAR ANDAR MAIS CHEIO
+    
     private void mover() {        
         if (!chegouAoDestino) {
             if (posDestino < pos) {
@@ -121,6 +123,8 @@ public class Elevador extends Thread implements IElevador {
     public boolean getEstaOcupado() {
         return estaOcupado;
     }
+
+    //MÉTODO VISITAR ANDAR MAIS CHEIO
 
     public void setEstaOcupado(boolean estaOcupado) {
         this.estaOcupado = estaOcupado;

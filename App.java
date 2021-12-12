@@ -27,6 +27,8 @@ public class App {
         predio.parar();
     }
 
+    //MÉTODO VISITAR ANDAR MAIS CHEIO
+
     private void criarPassageiros() {
         for (int i = 0; i < N_PASSAGEIROS; i++) {
             int andarInicial = ThreadLocalRandom.current().nextInt(0, N_ANDARES);
