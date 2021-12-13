@@ -91,24 +91,14 @@ public class Passageiro extends Thread implements IElevador {
         if (lugarNaFila != 0) {
             //System.out.println("Passageiro " + id + " é o " + lugarNaFila + "º da fila do " + (andarAtual + 1) + "º andar");
             try {
-                /*
-                int esperaAux = lugarNaFila;
-                if (lugarNaFila < 3) {
-                    esperaAux = TEMPO_ESPERA;
-                } else {
-                    esperaAux = TEMPO_ESPERA * (lugarNaFila / 2);
-                }*/
                 Thread.sleep(TEMPO_ESPERA);
             } catch (InterruptedException e) {
-                //e.printStackTrace();
                 Thread.currentThread().interrupt();
             }
         }
     }
 
     private void avancarNaFila() {
-        //Se o elevador estiver cheio e estiver no andar atual, todos do andar devem diminuir 1 lugar na fila e avançarem até o novo ponto
-        //Ir para o último lugar levando em consideração q a fila vai andar pra frente
         if (!estaNoElevador &&
             lugarNaFila > 1 &&
             andarAtual == predio.getElevador().getAndarAtual() &&
@@ -167,7 +157,9 @@ public class Passageiro extends Thread implements IElevador {
                 fecharPorta();
 
                 int destinoAux = ThreadLocalRandom.current().nextInt(0, predio.getAndares().size());
-                while (destinoAux == andarAtual) {
+                System.out.println(Elevador.getAndaresVisitados());
+                while (destinoAux == andarAtual || Elevador.getAndaresVisitados().contains(destinoAux)) {
+                    System.out.println("Entrou no while");
                     destinoAux = ThreadLocalRandom.current().nextInt(0, predio.getAndares().size());
                 }
                 visitarAndar(destinoAux); //ThreadLocalRandom.current().nextInt(0, predio.getAndares().size()));

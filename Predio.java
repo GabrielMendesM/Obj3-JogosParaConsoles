@@ -53,14 +53,14 @@ public class Predio extends JPanel {
                 if (filas.get(andarDestino) < filas.get(i)) {
                     andarDestino = i;
                 }
-            }    
+            }
         } else {
             for (int i = 0; i < filas.size(); i++) {
                 //System.out.println("Fila " + i + " tem " + filas.get(i) + " pessoas.");
                 if (filas.get(andarDestino) < filas.get(i)) {
                     andarDestino = i;
                 }
-            }    
+            }
         }
         elevador.visitarAndar(andarDestino);
     }

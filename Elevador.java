@@ -5,6 +5,8 @@
 */
 
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import javax.swing.ImageIcon;
@@ -16,6 +18,7 @@ public class Elevador extends Thread implements IElevador {
 
     //int aux = 0;
 
+
     private int pos;
     private int posDestino;
     private int andarAtual;
@@ -24,6 +27,8 @@ public class Elevador extends Thread implements IElevador {
     private Predio predio;
     private ImageIcon portaAberta;
     private ImageIcon portaFechada;
+
+    private static List<Integer> andaresVisitados = new ArrayList<>();
 
     private boolean portaEstaAberta = false;
     private boolean chegouAoDestino = true;
@@ -70,6 +75,7 @@ public class Elevador extends Thread implements IElevador {
                 //System.out.println("Elevador chegou " + aux + " vezes.");
                 andarAtual = andarDestino;
                 chegouAoDestino = true;
+                andaresVisitados.add(andarDestino);
             }
             predio.repintar();
         }
@@ -136,5 +142,9 @@ public class Elevador extends Thread implements IElevador {
 
     public static final int getIntervaloExecucao() {
         return INTERVALO_EXECUCAO;
+    }
+
+    public static List<Integer> getAndaresVisitados() {
+        return andaresVisitados;
     }
 }
