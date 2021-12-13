@@ -112,18 +112,18 @@ public class Elevador extends Thread implements IElevador {
         chegouAoDestino = false;
     }
 
-    public int getAndarAtual() {
-        return andarAtual;
-    }
-
     public boolean getEstaNoDestino() {
         return chegouAoDestino;
+    }
+
+    public int getAndarAtual() {
+        return andarAtual;
     }
 
     public boolean getEstaOcupado() {
         return estaOcupado;
     }
-
+    //tentar semaphore para todo passageiro usar o elevador 1 vez
     //MÉTODO VISITAR ANDAR MAIS CHEIO
 
     public void setEstaOcupado(boolean estaOcupado) {

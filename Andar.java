@@ -19,6 +19,10 @@ public class Andar {
         this.posY = posY;
     }
 
+    public int getPosY() {
+        return posY;
+    }
+
     public void draw(Graphics g) {
         img.paintIcon(panel, g, 0, posY);
     }
@@ -27,7 +31,4 @@ public class Andar {
         return img.getIconHeight();
     }
 
-    public int getPosY() {
-        return posY;
-    }
 }
