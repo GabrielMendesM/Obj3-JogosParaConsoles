@@ -1,6 +1,96 @@
+/*
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+
+==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
+*/
+
 import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import javax.swing.ImageIcon;
@@ -10,26 +100,26 @@ public class Elevador extends Thread implements IElevador {
     private static final int INTERVALO_EXECUCAO = 32;
     private static final Semaphore ELEVADOR_SEM = new Semaphore(1);
 
-    private int pos;
-    private int posDestino;
-    private int andarAtual;
-    private int andarDestino;
+    private static int pos;
+    private static int posDestino;
+    private static int andarAtual;
+    private static int andarDestino;
 
-    private Predio predio;
-    private ImageIcon portaAberta;
-    private ImageIcon portaFechada;
+    private static Predio predio;
+    private static ImageIcon portaAberta;
+    private static ImageIcon portaFechada;
 
-    private static List<Integer> andaresVisitados = new ArrayList<>();
-
-    private boolean portaEstaAberta = false;
-    private boolean chegouAoDestino = true;
-    private boolean estaOcupado = false;
+    private static boolean acabou = false;
+    private static boolean portaEstaAberta = false;
+    private static boolean chegouAoDestino = true;
+    private static boolean estaOcupado = false;
+    private static boolean podeSerChamado = false;
 
     public Elevador(Predio predio, int posInicial, int andarInicial) {
-        this.pos = posInicial;
-        this.andarAtual = andarInicial;
+        Elevador.pos = posInicial;
+        Elevador.andarAtual = andarInicial;
 
-        this.predio = predio;
+        Elevador.predio = predio;
         
         portaAberta = new ImageIcon(getClass().getResource("./img/elevator_open.png"));
         portaFechada = new ImageIcon(getClass().getResource("./img/elevator_close.png"));
@@ -49,7 +139,6 @@ public class Elevador extends Thread implements IElevador {
     }
 
     public void parar() {
-        //this.interrupt();
         this.rodando = false;
     }
     
@@ -62,10 +151,14 @@ public class Elevador extends Thread implements IElevador {
             } else {
                 andarAtual = andarDestino;
                 chegouAoDestino = true;
-                andaresVisitados.add(andarDestino);
-                System.out.println("Andares visitados: " + andaresVisitados.size());
+                podeSerChamado = false;
+                ELEVADOR_SEM.release();
             }
             predio.repintar();
+        } else {
+            if (predio.getFilas().get(andarAtual) == 0) {
+                podeSerChamado = true;
+            }
         }
     }
 
@@ -78,10 +171,12 @@ public class Elevador extends Thread implements IElevador {
 
             try {
                 Thread.sleep(INTERVALO_EXECUCAO);
-            } catch (InterruptedException e) {}
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
-    public int getLargura() {
+    public static int getLargura() {
         return portaAberta.getIconWidth();
     }
 
@@ -99,11 +194,13 @@ public class Elevador extends Thread implements IElevador {
 
     @Override
     public void visitarAndar(int andar) {
+        podeSerChamado = false;
         andarDestino = andar;
         posDestino = predio.getAndares().get(andar).getPosY();
         chegouAoDestino = false;
     }
 
+    /*
     public void visitarAndarMaisCheio(List<Integer> filas) {
         int andarDestino = getAndarAtual();
         if (filas.get(getAndarAtual()) > 0) {
@@ -123,21 +220,26 @@ public class Elevador extends Thread implements IElevador {
         }
         visitarAndar(andarDestino);        
     }
+    */
 
-    public boolean getEstaNoDestino() {
+    public static boolean getEstaNoDestino() {
         return chegouAoDestino;
     }
 
-    public int getAndarAtual() {
+    public static int getAndarAtual() {
         return andarAtual;
     }
 
-    public boolean getEstaOcupado() {
+    public static boolean getEstaOcupado() {
         return estaOcupado;
     }
 
-    public void setEstaOcupado(boolean estaOcupado) {
-        this.estaOcupado = estaOcupado;
+    public static boolean getPodeSerChamado() {
+        return podeSerChamado;
+    }
+
+    public static void setEstaOcupado(boolean estaOcupado) {
+        Elevador.estaOcupado = estaOcupado;
     }
 
     public static final Semaphore getElevadorSem() {
@@ -146,9 +248,5 @@ public class Elevador extends Thread implements IElevador {
 
     public static final int getIntervaloExecucao() {
         return INTERVALO_EXECUCAO;
-    }
-
-    public static List<Integer> getAndaresVisitados() {
-        return andaresVisitados;
     }
 }
