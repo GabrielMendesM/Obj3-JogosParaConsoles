@@ -10,7 +10,7 @@ import javax.swing.WindowConstants;
 public class Janela extends JFrame {
     public Janela(Predio predio) {
         setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(580, predio.getAlturaPredio()));
+        setPreferredSize(new Dimension(predio.getAndares().get(0).getImgWidth(), predio.getAlturaPredio()));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         add(predio, BorderLayout.CENTER);
         setVisible(true);
