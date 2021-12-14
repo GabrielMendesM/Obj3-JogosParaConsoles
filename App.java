@@ -5,8 +5,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class App {
     private List<Passageiro> passageiros = new ArrayList<>();
     private static Predio predio;
-    private static final int N_ANDARES = 8;
-    private static final int N_PASSAGEIROS = 3;
+    private static final int N_ANDARES = 7;
+    private static final int N_PASSAGEIROS = 14;
     private static final int ANDAR_INICIAL = ThreadLocalRandom.current().nextInt(0, N_ANDARES);
 
     private List<Integer> filas = new ArrayList<>();
