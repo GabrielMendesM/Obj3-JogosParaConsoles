@@ -3,8 +3,6 @@ import java.awt.Graphics;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-//MÉTODO VISITAR ANDAR MAIS CHEIO
-
 public class Andar {
     private final JPanel panel;
     private final ImageIcon img;

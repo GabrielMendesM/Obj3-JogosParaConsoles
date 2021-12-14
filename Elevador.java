@@ -1,9 +1,3 @@
-/*
-
-============ PERSONAGENS ANDAREM NA FILA ============
-
-*/
-
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +9,6 @@ public class Elevador extends Thread implements IElevador {
     private volatile boolean rodando = false;
     private static final int INTERVALO_EXECUCAO = 32;
     private static final Semaphore ELEVADOR_SEM = new Semaphore(1);
-
-    //int aux = 0;
-
 
     private int pos;
     private int posDestino;
@@ -34,7 +25,7 @@ public class Elevador extends Thread implements IElevador {
     private boolean chegouAoDestino = true;
     private boolean estaOcupado = false;
 
-    public Elevador(Predio predio, int nAndares, int posInicial, int andarInicial) {
+    public Elevador(Predio predio, int posInicial, int andarInicial) {
         this.pos = posInicial;
         this.andarAtual = andarInicial;
 
@@ -61,8 +52,6 @@ public class Elevador extends Thread implements IElevador {
         this.interrupt();
         this.rodando = false;
     }
-
-    //MÉTODO VISITAR ANDAR MAIS CHEIO
     
     private void mover() {        
         if (!chegouAoDestino) {
@@ -71,8 +60,6 @@ public class Elevador extends Thread implements IElevador {
             } else if (posDestino > pos) {
                 pos += 3;
             } else {
-                //aux++;
-                //System.out.println("Elevador chegou " + aux + " vezes.");
                 andarAtual = andarDestino;
                 chegouAoDestino = true;
                 andaresVisitados.add(andarDestino);
@@ -90,9 +77,7 @@ public class Elevador extends Thread implements IElevador {
 
             try {
                 Thread.sleep(INTERVALO_EXECUCAO);
-            } catch (InterruptedException e) {
-                //e.printStackTrace();
-            }
+            } catch (InterruptedException e) {}
         }
     }
     public int getLargura() {
@@ -118,6 +103,26 @@ public class Elevador extends Thread implements IElevador {
         chegouAoDestino = false;
     }
 
+    public void visitarAndarMaisCheio(List<Integer> filas) {
+        int andarDestino = getAndarAtual();
+        if (filas.get(getAndarAtual()) > 0) {
+            andarDestino = getAndarAtual();
+        } else if (andarDestino > predio.getAndares().size() / 2) {
+            for (int i = filas.size() - 1; i > -1; i--) {
+                if (filas.get(andarDestino) < filas.get(i)) {
+                    andarDestino = i;
+                }
+            }
+        } else {
+            for (int i = 0; i < filas.size(); i++) {
+                if (filas.get(andarDestino) < filas.get(i)) {
+                    andarDestino = i;
+                }
+            }
+        }
+        visitarAndar(andarDestino);        
+    }
+
     public boolean getEstaNoDestino() {
         return chegouAoDestino;
     }
@@ -129,8 +134,6 @@ public class Elevador extends Thread implements IElevador {
     public boolean getEstaOcupado() {
         return estaOcupado;
     }
-    //tentar semaphore para todo passageiro usar o elevador 1 vez
-    //MÉTODO VISITAR ANDAR MAIS CHEIO
 
     public void setEstaOcupado(boolean estaOcupado) {
         this.estaOcupado = estaOcupado;

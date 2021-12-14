@@ -19,16 +19,10 @@ public class Janela extends JFrame {
         pnlGUI.setLayout(new FlowLayout(FlowLayout.LEFT));
         Button btnComecar = new Button("Começar");
         Button btnParar = new Button("Parar");
-        /*
-        Button btnAbrirPorta = new Button("Abrir Porta");
-        Button btnFecharPorta = new Button("Fechar Porta");
-        */
+
         pnlGUI.add(btnComecar);
         pnlGUI.add(btnParar);
-        /*
-        pnlGUI.add(btnAbrirPorta);
-        pnlGUI.add(btnFecharPorta);
-        */
+
         add(pnlGUI, BorderLayout.SOUTH);
 
         btnComecar.addActionListener(e -> {
@@ -37,16 +31,6 @@ public class Janela extends JFrame {
         });
         
         btnParar.addActionListener(e -> predio.parar());
-
-        /*
-        btnAbrirPorta.addActionListener(e -> {
-            predio.getElevador().abrirPorta();
-        });
-        
-        btnFecharPorta.addActionListener(e -> {
-            predio.getElevador().fecharPorta();
-        });
-        */
 
         pack();
     }
