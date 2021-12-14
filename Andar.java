@@ -29,4 +29,7 @@ public class Andar {
         return img.getIconHeight();
     }
 
+    public int getImgWidth() {
+        return img.getIconWidth();
+    }
 }

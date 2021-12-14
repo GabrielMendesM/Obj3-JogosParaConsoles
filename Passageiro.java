@@ -8,8 +8,6 @@ public class Passageiro extends Thread implements IElevador {
     private volatile boolean rodando = false;
     private static final int INTERVALO_EXECUCAO = Elevador.getIntervaloExecucao();
     private static final int TEMPO_ESPERA = 100;
-    
-    private int rodouVezes = 0;
 
     private int id;
     private int lugarNaFila;
@@ -52,9 +50,14 @@ public class Passageiro extends Thread implements IElevador {
     }
 
     public void parar() {
-        this.interrupt();
+        //this.interrupt();
+        try {
+            join();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         this.rodando = false;
-        System.out.println("No total, personagem " + id + " usou o elevador " + rodouVezes + " vezes.");
     }
 
     private void esperar() {
@@ -97,8 +100,14 @@ public class Passageiro extends Thread implements IElevador {
                 }
 
                 try {
+                    join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                /*
+                try {
                     Thread.sleep(TEMPO_ESPERA);
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {}*/
             }
         }
     }    
@@ -148,6 +157,41 @@ public class Passageiro extends Thread implements IElevador {
 
             Predio.setFilaSem(new Semaphore(0));
 
+            posXDestino = predio.getAndares().get(0).getImgWidth();
+
+            abrirPorta();
+            while (posX < posXDestino) {
+                posX++;
+                if (estaNoElevador && posX >= predio.getElevador().getLargura()) {
+                    fecharPorta();
+                    estaNoElevador = false;
+                    //andarAtual = andarDestino;
+                    //predio.setFilas(andarAtual, true);
+                    lugarNaFila = -1;// predio.getFilas().get(andarAtual);
+                    predio.getElevador().setEstaOcupado(false);
+                    Elevador.getElevadorSem().release();
+                }
+                predio.repintar();
+                
+                try {
+                    Thread.sleep(INTERVALO_EXECUCAO / 10);
+                } catch (InterruptedException e) {}
+            }
+            //posXDestino = POS_DENTRO_ELEVADOR;
+            parar();
+            //chegouAoDestino = true;
+        }
+    }
+    
+    /*
+    private void sairDoElevador() {
+        if (estaNoElevador && 
+            lugarNaFila == 0 && 
+            andarAtual == predio.getElevador().getAndarAtual() &&
+            predio.getElevador().getEstaNoDestino()) {
+
+            Predio.setFilaSem(new Semaphore(0));
+
             abrirPorta();
             while (posX < posXDestino) {
                 posX++;
@@ -171,6 +215,7 @@ public class Passageiro extends Thread implements IElevador {
             Elevador.getElevadorSem().release();
         }
     }
+    */
 
     private void moverY() {
         if (!chegouAoDestino &&

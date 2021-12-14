@@ -40,6 +40,11 @@ public class Predio extends JPanel {
 
     public void parar() {
         for (Passageiro p : passageiros) {
+            /*try {
+                p.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
             p.parar();
         }
         this.elevador.parar();

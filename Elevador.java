@@ -49,7 +49,7 @@ public class Elevador extends Thread implements IElevador {
     }
 
     public void parar() {
-        this.interrupt();
+        //this.interrupt();
         this.rodando = false;
     }
     
@@ -63,6 +63,7 @@ public class Elevador extends Thread implements IElevador {
                 andarAtual = andarDestino;
                 chegouAoDestino = true;
                 andaresVisitados.add(andarDestino);
+                System.out.println("Andares visitados: " + andaresVisitados.size());
             }
             predio.repintar();
         }
