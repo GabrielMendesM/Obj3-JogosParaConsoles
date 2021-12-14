@@ -185,7 +185,6 @@ public class Passageiro extends Thread implements IElevador {
             chegouAoDestino) {
 
             if (Elevador.getElevadorSem().tryAcquire()) {
-                System.out.println("Passageiro " + id + " está chamando o elevador.");
                 predio.getElevador().visitarAndar(andarAtual);
             }
         }
