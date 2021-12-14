@@ -46,7 +46,8 @@ public class Predio extends JPanel {
             }
             p.parar();
         }
-        this.elevador.parar();
+        elevador.parar();
+        System.out.println("ACABOU!");
     }
 
     @Override

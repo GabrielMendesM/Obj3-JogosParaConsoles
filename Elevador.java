@@ -1,95 +1,3 @@
-/*
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-
-==================== FINALIZAR PROGRAMA QUANDO TODO MUNDO FOR EMBORA ====================
-*/
-
 import java.awt.Graphics;
 import java.util.concurrent.Semaphore;
 
@@ -109,7 +17,6 @@ public class Elevador extends Thread implements IElevador {
     private static ImageIcon portaAberta;
     private static ImageIcon portaFechada;
 
-    private static boolean acabou = false;
     private static boolean portaEstaAberta = false;
     private static boolean chegouAoDestino = true;
     private static boolean estaOcupado = false;
@@ -153,6 +60,11 @@ public class Elevador extends Thread implements IElevador {
                 chegouAoDestino = true;
                 podeSerChamado = false;
                 ELEVADOR_SEM.release();
+                
+                if (acabou()) {
+                    predio.parar();
+                }
+
             }
             predio.repintar();
         } else {
@@ -248,5 +160,14 @@ public class Elevador extends Thread implements IElevador {
 
     public static final int getIntervaloExecucao() {
         return INTERVALO_EXECUCAO;
+    }
+
+    private static boolean acabou() {
+        for (int i : predio.getFilas()) {
+            if (i > 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }
