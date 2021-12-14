@@ -11,7 +11,6 @@ public class Passageiro extends Thread implements IElevador {
     private static final int INTERVALO_EXECUCAO = Elevador.getIntervaloExecucao();
     private static final int TEMPO_ESPERA = 100;
 
-    private int id;
     private int lugarNaFila;
     private int andarAtual;
     private int andarDestino;
@@ -29,7 +28,6 @@ public class Passageiro extends Thread implements IElevador {
     private boolean chegouAoDestino = true;
 
     public Passageiro(int id, int lugarNaFila, int andarInicial, Predio predio) {
-        this.id = id + 1;
         this.lugarNaFila = lugarNaFila;
         this.andarAtual = andarInicial;
 
